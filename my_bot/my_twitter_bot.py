@@ -30,10 +30,10 @@ while True:
 			#Reply
                 	phrase =random.choice(f)
                 	print('\nTweet by: @' + tweet.user.screen_name)
-                	print('ID: @' + str(tweet.user.id))
-                	tweetId = tweet.user.id
+                	print('ID: @' + str(tweet.id))
+                	tweetId = tweet.id
                 	username = tweet.user.screen_name
-                	api.update_status(phrase, in_reply_to_status_id = tweetId)
+                	api.update_status(phrase, in_reply_to_status_id = tweetId,auto_populate_reply_metadata=True)
                 	print ("Replied with " + phrase) 
 		except tweepy.TweepError as e:
                 	print(e.reason)
