@@ -34,29 +34,48 @@ def store_last_seen_id(last_seen_id, file_name):
 	return
 
 def responder_tweets():
-	search = "@pruebarri_bot HolaOSL"
 	last_seen_id = retrieve_last_seen_id(FILE_NAME)
-	tweets = tweepy.Cursor(api.search, search, since_id=last_seen_id).items(numberOfTweets)
-    	
+
+	#Bloque saludo
+	saludo = "saludo"
+	search_saludo = "@pruebarri_bot !HolaOSL"
+	tweets_saludo = tweepy.Cursor(api.search, search_saludo, since_id=last_seen_id).items(numberOfTweets)
+
+	#Bloque web
+	web = "web"
+	search_web = "@pruebarri_bot !web"
+	tweets_web = tweepy.Cursor(api.search, search_web, since_id=last_seen_id).items(numberOfTweets)
+
+	#Bloque de respuestas
+	responder(last_seen_id,tweets_saludo,saludo)
+	responder(last_seen_id,tweets_web,web)
+	return
+
+
+
+def responder(last_seen_id, tweets, tipo):
 	for tweet in tweets:
 		try:
-			#Reply
-			phrase =random.choice(f)
+			#Selecciona respuesta en función de la interacción
+			if tipo == "saludo":
+				phrase = random.choice(f)
+			elif tipo == "web":
+				phrase = "Nuestra web es https://osl.ugr.es/"
 			print('\nTweet by: @' + tweet.user.screen_name)
 			print('ID: @' + str(tweet.id))
 			tweetId = tweet.id
-			
+
 			if tweetId > last_seen_id:
 				store_last_seen_id(tweetId, FILE_NAME)
-				
+
 			username = tweet.user.screen_name
 			api.update_status(phrase, in_reply_to_status_id = tweetId,auto_populate_reply_metadata=True)
-			print ("Replied with " + phrase) 
+			print ("Replied with " + phrase)
 		except tweepy.TweepError as e:
 			print(e.reason)
 		except StopIteration:
 			break
-                
+	return
 
 while True:
     responder_tweets()
