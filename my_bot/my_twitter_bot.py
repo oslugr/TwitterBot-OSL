@@ -47,13 +47,15 @@ def responder_tweets():
 	tweets_web = tweepy.Cursor(api.search, search_web, since_id=last_seen_id).items(numberOfTweets)
 
 	#Bloque de respuestas
-	responder(last_seen_id,tweets_saludo,saludo)
-	responder(last_seen_id,tweets_web,web)
+	responder(tweets_saludo,saludo)
+	responder(tweets_web,web)
 	return
 
 
 
-def responder(last_seen_id, tweets, tipo):
+def responder(tweets, tipo):
+	#La variable debe ser renovada para no repetir respuestas a tweets
+	last_seen_id = retrieve_last_seen_id(FILE_NAME)
 	for tweet in tweets:
 		try:
 			#Selecciona respuesta en función de la interacción
