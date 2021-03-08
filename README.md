@@ -1,5 +1,5 @@
 # TwitterBot-OSL
-Bot para twittear automáticamente información relativa a la OSL. Creado por [Juan Sánchez Rodríguez](https://github.com/Barrilao) 
+Bot para twittear automáticamente información relativa a la OSL. Creado por [Juan Sánchez Rodríguez](https://github.com/Barrilao).
 
 # Requisitos
 El bot ha sido probado en Python 3.8.5
