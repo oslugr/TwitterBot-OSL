@@ -22,6 +22,11 @@ print(user.location)
 filename = open("ejemplo.txt", 'r')
 f = filename.readlines()
 filename.close()
+
+filename = open("chistes.txt", 'r')
+chistes = filename.readlines()
+filename.close()
+
 numberOfTweets = 10
 
 FILE_NAME = 'ultimo_id.txt'
@@ -75,6 +80,8 @@ def responder(tweets, tipo):
                 phrase = scraping_osl()
             elif tipo == "contacto":
                 phrase = "Contacta con nosotros por teléfono -> 958 24 10 00 o por e-mail -> osl@ugr.es . Síguenos en nuestro Twitter para mantenerte informado sobre todo @OSLUGR "
+            elif tipo == "chiste":
+                phrase = random.choice(chistes)
             elif tipo == "creador":
                 phrase = "Mi padre es @Juan_Barrilao @Juan__Barri y me debe unas piernas"
 
@@ -102,7 +109,7 @@ def responder_tweets():
 
     # Bloque saludo
     saludo = "saludo"
-    search_saludo = "@pruebarri_bot !HolaOSL"
+    search_saludo = "@pruebarri_bot !hola"
     tweets_saludo = tweepy.Cursor(
         api.search, search_saludo, since_id=last_seen_id).items(numberOfTweets)
 
@@ -124,6 +131,12 @@ def responder_tweets():
     tweets_contacto = tweepy.Cursor(
         api.search, search_contacto, since_id=last_seen_id).items(numberOfTweets)
 
+    # Bloque chiste
+    chiste = "chiste"
+    search_chiste = "@pruebarri_bot !chiste"
+    tweets_chiste = tweepy.Cursor(
+        api.search, search_chiste, since_id=last_seen_id).items(numberOfTweets)
+
     # Bloque creador
     creador = "creador"
     search_creador = "@pruebarri_bot !creador"
@@ -135,6 +148,7 @@ def responder_tweets():
     responder(tweets_web, web)
     responder(tweets_actividad, actividad)
     responder(tweets_contacto, contacto)
+    responder(tweets_chiste, chiste)
     responder(tweets_creador, creador)
     return
 
