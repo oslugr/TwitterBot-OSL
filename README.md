@@ -9,8 +9,8 @@ Para que el bot responda se deberá escribir un tweet que mencione al bot, en es
 Estos dos requisitos podrán posicionarse en cualquier parte del tweet.
 
 # Instrucciones
-!hola -> el bot responderá con un saludo aleatorio.
-!web -> el bot responderá con la web de la OSL.
-!actividad -> el bot responderá con las dos últimas publicaciones en el blog de la OSL.
-!contacto -> muestra la información de contacto
-!creador -> responde con las redes de su creador
+- !hola -> el bot responderá con un saludo aleatorio.
+- !web -> el bot responderá con la web de la OSL.
+- !actividad -> el bot responderá con las dos últimas publicaciones en el blog de la OSL.
+- !contacto -> muestra la información de contacto
+- !creador -> responde con las redes de su creador
