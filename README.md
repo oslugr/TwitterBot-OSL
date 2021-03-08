@@ -18,3 +18,4 @@ Estos dos requisitos podrán posicionarse en cualquier parte del tweet. El bot p
 
 # Ejemplo de uso
 
+![alt text](https://raw.githubusercontent.com/oslugr/TwitterBot-OSL/blob/main/my_bot/img/prueba_bot.png)
