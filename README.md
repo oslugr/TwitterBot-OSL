@@ -13,6 +13,7 @@ Estos dos requisitos podrán posicionarse en cualquier parte del tweet. El bot p
 - #web -> muestra la web de la OSL.
 - #actividad -> el bot responderá con las dos últimas publicaciones en el blog de la OSL.
 - #contacto -> muestra la información de contacto
+- #redes -> el bot muestra las redes sociales de la OSL
 - #chiste -> cuenta un chiste aleatorio sacado de un txt
 - #creador -> responde con las redes de su creador
 
