@@ -81,6 +81,8 @@ def responder(tweets, tipo):
                 phrase = scraping_osl()
             elif tipo == "contacto":
                 phrase = "Contacta con nosotros por teléfono -> 958 24 10 00 o por e-mail -> osl@ugr.es . Síguenos en nuestro Twitter para mantenerte informado sobre todo @OSLUGR "
+            elif tipo == "redes":
+                phrase = "Twitter: @OSLUGR Facebook: https://www.facebook.com/SoftwareLibreUGR Instagram: https://www.instagram.com/oslugr YouTube: https://www.youtube.com/user/oslugr GitHub: https://github.com/oslugr Meetup: https://www.meetup.com/es-ES/Granada-Geek Telegram: https://telegram.me/oslugr"
             elif tipo == "chiste":
                 phrase = random.choice(chistes)
             elif tipo == "creador":
@@ -132,6 +134,12 @@ def responder_tweets():
     tweets_contacto = tweepy.Cursor(
         api.search, search_contacto, since_id=last_seen_id).items(numberOfTweets)
 
+    # Bloque redes
+    redes = "redes"
+    search_redes = "@pruebarri_bot #redes"
+    tweets_redes = tweepy.Cursor(
+        api.search, search_redes, since_id=last_seen_id).items(numberOfTweets)
+
     # Bloque chiste
     chiste = "chiste"
     search_chiste = "@pruebarri_bot #chiste"
@@ -149,10 +157,12 @@ def responder_tweets():
     responder(tweets_web, web)
     responder(tweets_actividad, actividad)
     responder(tweets_contacto, contacto)
+    responder(tweets_redes, redes)
     responder(tweets_chiste, chiste)
     responder(tweets_creador, creador)
     return
 
+# Función que responde con la última entrada del blog de la OSL
 def buenos_dias():
         pagina = requests.get(URL)
 
@@ -173,6 +183,6 @@ def buenos_dias():
 # main
 while True:
     responder_tweets()
-    if dt.datetime.now().hour == 3 and dt.datetime.now().minute == 0:
+    if dt.datetime.now().hour == 3 and dt.datetime.now().minute == 0: #Mensaje programado para las 3 de la tarde
         buenos_dias()
     time.sleep(60)  # Ciclo por minuto
