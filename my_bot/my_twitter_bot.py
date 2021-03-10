@@ -2,6 +2,7 @@ import tweepy
 import time
 import sys
 import random
+import datetime as dt
 import requests
 from bs4 import BeautifulSoup
 
@@ -109,37 +110,37 @@ def responder_tweets():
 
     # Bloque saludo
     saludo = "saludo"
-    search_saludo = "@pruebarri_bot !hola"
+    search_saludo = "@pruebarri_bot #hola"
     tweets_saludo = tweepy.Cursor(
         api.search, search_saludo, since_id=last_seen_id).items(numberOfTweets)
 
     # Bloque web
     web = "web"
-    search_web = "@pruebarri_bot !web"
+    search_web = "@pruebarri_bot #web"
     tweets_web = tweepy.Cursor(
         api.search, search_web, since_id=last_seen_id).items(numberOfTweets)
 
     # Bloque actividad
     actividad = "actividad"
-    search_actividad = "@pruebarri_bot !actividad"
+    search_actividad = "@pruebarri_bot #actividad"
     tweets_actividad = tweepy.Cursor(
         api.search, search_actividad, since_id=last_seen_id).items(numberOfTweets)
 
     # Bloque contacto
     contacto = "contacto"
-    search_contacto = "@pruebarri_bot !contacto"
+    search_contacto = "@pruebarri_bot #contacto"
     tweets_contacto = tweepy.Cursor(
         api.search, search_contacto, since_id=last_seen_id).items(numberOfTweets)
 
     # Bloque chiste
     chiste = "chiste"
-    search_chiste = "@pruebarri_bot !chiste"
+    search_chiste = "@pruebarri_bot #chiste"
     tweets_chiste = tweepy.Cursor(
         api.search, search_chiste, since_id=last_seen_id).items(numberOfTweets)
 
     # Bloque creador
     creador = "creador"
-    search_creador = "@pruebarri_bot !creador"
+    search_creador = "@pruebarri_bot #creador"
     tweets_creador = tweepy.Cursor(
         api.search, search_creador, since_id=last_seen_id).items(numberOfTweets)
 
@@ -152,8 +153,26 @@ def responder_tweets():
     responder(tweets_creador, creador)
     return
 
+def buenos_dias():
+        pagina = requests.get(URL)
+
+        soup = BeautifulSoup(pagina.content, "html.parser")
+        resultados = soup.find(class_="art-layout-cell art-content clearfix")
+        respuesta = "Buenas tardes a todos, aquí os dejo la última entrada en la web de la @OSLUGR: "
+
+        articulo = resultados.find_all("h2", class_="art-postheader")[:1]
+
+        titulo = articulo[0].find("a")
+        respuesta += ' "' + str(titulo.text.strip()) + '" ' + str(titulo["href"])
+        api.update_status(respuesta)
+        print("Mensaje de buenas tardes: " + respuesta)
+        return
+
+
 
 # main
 while True:
     responder_tweets()
+    if dt.datetime.now().hour == 3 and dt.datetime.now().minute == 0:
+        buenos_dias()
     time.sleep(60)  # Ciclo por minuto
