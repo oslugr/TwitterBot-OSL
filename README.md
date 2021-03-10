@@ -9,12 +9,15 @@ Para que el bot responda se deberá escribir un tweet que mencione al bot, en es
 Estos dos requisitos podrán posicionarse en cualquier parte del tweet. El bot puede responder a varias instrucciones a la vez.
 
 # Instrucciones
-- !hola -> responderá con un saludo aleatorio.
-- !web -> muestra la web de la OSL.
-- !actividad -> el bot responderá con las dos últimas publicaciones en el blog de la OSL.
-- !contacto -> muestra la información de contacto
-- !chiste -> cuenta un chiste aleatorio sacado de un txt
-- !creador -> responde con las redes de su creador
+- #hola -> responderá con un saludo aleatorio.
+- #web -> muestra la web de la OSL.
+- #actividad -> el bot responderá con las dos últimas publicaciones en el blog de la OSL.
+- #contacto -> muestra la información de contacto
+- #chiste -> cuenta un chiste aleatorio sacado de un txt
+- #creador -> responde con las redes de su creador
+
+# Otras funciones
+El bot publicará diariamente un tweet con el ultimo post en la web de la OSL.
 
 # Ejemplo de uso
 
