@@ -17,7 +17,7 @@ Estos dos requisitos podrán posicionarse en cualquier parte del tweet. El bot p
 - #creador -> responde con las redes de su creador
 
 # Otras funciones
-El bot publicará diariamente un tweet con el ultimo post en la web de la OSL.
+El bot publicará diariamente un tweet con el último post en la web de la OSL.
 
 # Ejemplo de uso
 
