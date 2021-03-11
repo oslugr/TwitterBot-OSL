@@ -14,6 +14,7 @@ Estos dos requisitos podrán posicionarse en cualquier parte del tweet. El bot p
 - #actividad -> el bot responderá con las dos últimas publicaciones en el blog de la OSL.
 - #contacto -> muestra la información de contacto
 - #redes -> el bot muestra las redes sociales de la OSL
+- #avatar -> responderá con una imagen generada a raíz del nombre del usuario, para ello se ha usado [Github avatars generator](https://github.com/avdosev/github_avatars_generator)
 - #chiste -> cuenta un chiste aleatorio sacado de un txt
 - #creador -> responde con las redes de su creador
 
