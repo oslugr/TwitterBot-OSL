@@ -4,6 +4,7 @@ import sys
 import random
 import datetime as dt
 import requests
+import os
 from bs4 import BeautifulSoup
 
 
@@ -65,7 +66,33 @@ def store_last_seen_id(last_seen_id, file_name):
     f_write.close()
     return
 
+def generar_avatar(nombre):
+    respuesta = 'python3 gen.py 120 '
+    respuesta += str(nombre)
+    os.system(respuesta)
+    return
 
+def responder_con_imagen(tweets):
+    last_seen_id = retrieve_last_seen_id(FILE_NAME)
+    for tweet in tweets:
+        try:
+            media = "./img/example.png"
+            phrase = "Aquí está tu avatar generado por tu nombre: "
+            generar_avatar(tweet.user.screen_name)
+            print('\nTweet de: @' + tweet.user.screen_name)
+            print('ID: @' + str(tweet.id))
+            tweetId = tweet.id
+            if tweetId > last_seen_id:
+                store_last_seen_id(tweetId, FILE_NAME)
+            username = tweet.user.screen_name
+            api.update_with_media(media, status=phrase, in_reply_to_status_id=tweetId,
+                              auto_populate_reply_metadata=True)
+            print("Respuesta: " + phrase)
+        except tweepy.TweepError as e:
+            print(e.reason)
+        except StopIteration:
+            break
+    return
 # Función responsablde de elegir y realizar una respuesta
 def responder(tweets, tipo):
     # La variable debe ser renovada para no repetir respuestas a tweets
@@ -140,6 +167,11 @@ def responder_tweets():
     tweets_redes = tweepy.Cursor(
         api.search, search_redes, since_id=last_seen_id).items(numberOfTweets)
 
+    # Bloque avatar
+    search_avatar = "@pruebarri_bot #avatar"
+    tweets_avatar = tweepy.Cursor(
+        api.search, search_avatar, since_id=last_seen_id).items(numberOfTweets)
+
     # Bloque chiste
     chiste = "chiste"
     search_chiste = "@pruebarri_bot #chiste"
@@ -158,6 +190,7 @@ def responder_tweets():
     responder(tweets_actividad, actividad)
     responder(tweets_contacto, contacto)
     responder(tweets_redes, redes)
+    responder_con_imagen(tweets_avatar)
     responder(tweets_chiste, chiste)
     responder(tweets_creador, creador)
     return
