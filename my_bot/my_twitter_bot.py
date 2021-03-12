@@ -75,61 +75,63 @@ def generar_avatar(nombre):
 def responder_con_imagen(tweets):
     last_seen_id = retrieve_last_seen_id(FILE_NAME)
     for tweet in tweets:
-        try:
-            media = "./img/example.png"
-            phrase = "Aquí está tu avatar generado por tu nombre: "
-            generar_avatar(tweet.user.screen_name)
-            print('\nTweet de: @' + tweet.user.screen_name)
-            print('ID: @' + str(tweet.id))
-            tweetId = tweet.id
-            if tweetId > last_seen_id:
-                store_last_seen_id(tweetId, FILE_NAME)
-            username = tweet.user.screen_name
-            api.update_with_media(media, status=phrase, in_reply_to_status_id=tweetId,
-                              auto_populate_reply_metadata=True)
-            print("Respuesta: " + phrase)
-        except tweepy.TweepError as e:
-            print(e.reason)
-        except StopIteration:
-            break
+        if not tweet.retweeted and 'RT @' not in tweet.text:
+            try:
+                media = "./img/example.png"
+                phrase = "Aquí está tu avatar generado por tu nombre: "
+                generar_avatar(tweet.user.screen_name)
+                print('\nTweet de: @' + tweet.user.screen_name)
+                print('ID: @' + str(tweet.id))
+                tweetId = tweet.id
+                if tweetId > last_seen_id:
+                    store_last_seen_id(tweetId, FILE_NAME)
+                username = tweet.user.screen_name
+                api.update_with_media(media, status=phrase, in_reply_to_status_id=tweetId,
+                                  auto_populate_reply_metadata=True)
+                print("Respuesta: " + phrase)
+            except tweepy.TweepError as e:
+                print(e.reason)
+            except StopIteration:
+                break
     return
 # Función responsablde de elegir y realizar una respuesta
 def responder(tweets, tipo):
     # La variable debe ser renovada para no repetir respuestas a tweets
     last_seen_id = retrieve_last_seen_id(FILE_NAME)
     for tweet in tweets:
-        try:
-            # Selecciona respuesta en función de la interacción
-            if tipo == "saludo":
-                phrase = random.choice(f)
-            elif tipo == "web":
-                phrase = "Nuestra web es https://osl.ugr.es/"
-            elif tipo == "actividad":
-                phrase = scraping_osl()
-            elif tipo == "contacto":
-                phrase = "Contacta con nosotros por teléfono -> 958 24 10 00 o por e-mail -> osl@ugr.es . Síguenos en nuestro Twitter para mantenerte informado sobre todo @OSLUGR "
-            elif tipo == "redes":
-                phrase = "Twitter: @OSLUGR Facebook: https://www.facebook.com/SoftwareLibreUGR Instagram: https://www.instagram.com/oslugr YouTube: https://www.youtube.com/user/oslugr GitHub: https://github.com/oslugr Meetup: https://www.meetup.com/es-ES/Granada-Geek Telegram: https://telegram.me/oslugr"
-            elif tipo == "chiste":
-                phrase = random.choice(chistes)
-            elif tipo == "creador":
-                phrase = "Mi padre es @Juan_Barrilao @Juan__Barri y me debe unas piernas"
+        if not tweet.retweeted and 'RT @' not in tweet.text:
+            try:
+                # Selecciona respuesta en función de la interacción
+                if tipo == "saludo":
+                    phrase = random.choice(f)
+                elif tipo == "web":
+                    phrase = "Nuestra web es https://osl.ugr.es/"
+                elif tipo == "actividad":
+                    phrase = scraping_osl()
+                elif tipo == "contacto":
+                    phrase = "Contacta con nosotros por teléfono -> 958 24 10 00 o por e-mail -> osl@ugr.es . Síguenos en nuestro Twitter para mantenerte informado sobre todo @OSLUGR "
+                elif tipo == "redes":
+                    phrase = "Twitter: @OSLUGR Facebook: https://www.facebook.com/SoftwareLibreUGR Instagram: https://www.instagram.com/oslugr YouTube: https://www.youtube.com/user/oslugr GitHub: https://github.com/oslugr Meetup: https://www.meetup.com/es-ES/Granada-Geek Telegram: https://telegram.me/oslugr"
+                elif tipo == "chiste":
+                    phrase = random.choice(chistes)
+                elif tipo == "creador":
+                    phrase = "Mi padre es @Juan_Barrilao @Juan__Barri y me debe unas piernas"
 
-            print('\nTweet de: @' + tweet.user.screen_name)
-            print('ID: @' + str(tweet.id))
-            tweetId = tweet.id
+                print('\nTweet de: @' + tweet.user.screen_name)
+                print('ID: @' + str(tweet.id))
+                tweetId = tweet.id
 
-            if tweetId > last_seen_id:
-                store_last_seen_id(tweetId, FILE_NAME)
+                if tweetId > last_seen_id:
+                    store_last_seen_id(tweetId, FILE_NAME)
 
-            username = tweet.user.screen_name
-            api.update_status(phrase, in_reply_to_status_id=tweetId,
-                              auto_populate_reply_metadata=True)
-            print("Respuesta: " + phrase)
-        except tweepy.TweepError as e:
-            print(e.reason)
-        except StopIteration:
-            break
+                username = tweet.user.screen_name
+                api.update_status(phrase, in_reply_to_status_id=tweetId,
+                                  auto_populate_reply_metadata=True)
+                print("Respuesta: " + phrase)
+            except tweepy.TweepError as e:
+                print(e.reason)
+            except StopIteration:
+                break
     return
 
 
