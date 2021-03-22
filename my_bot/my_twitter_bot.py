@@ -6,12 +6,7 @@ import datetime as dt
 import requests
 import os
 from bs4 import BeautifulSoup
-
-
-CONSUMER_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-CONSUMER_SECRET = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-ACCESS_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-ACCESS_SECRET = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+from settings import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_KEY, ACCESS_SECRET
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -29,9 +24,9 @@ filename = open("chistes.txt", 'r')
 chistes = filename.readlines()
 filename.close()
 
-numberOfTweets = 10
+numeroTweets = 10
 
-FILE_NAME = 'ultimo_id.txt'
+archivoId = 'ultimo_id.txt'
 URL = "https://osl.ugr.es/"
 
 #Función que hace scraping en la web de la OSL para obtener los datos de las últimas entradas
@@ -52,17 +47,17 @@ def scraping_osl():
 
 
 # Devuelve el último id visto en el archivo ultimo_id.txt
-def retrieve_last_seen_id(file_name):
-    f_read = open(file_name, 'r')
-    last_seen_id = int(f_read.read().strip())
+def devuelve_ultimoId(archivoId):
+    f_read = open(archivoId, 'r')
+    ultimoId = int(f_read.read().strip())
     f_read.close()
-    return last_seen_id
+    return ultimoId
 
 
 # Guarda el último id visto en el archivo ultimo_id.txt
-def store_last_seen_id(last_seen_id, file_name):
-    f_write = open(file_name, 'w')
-    f_write.write(str(last_seen_id))
+def guarda_ultimoId(ultimoId, archivoId):
+    f_write = open(archivoId, 'w')
+    f_write.write(str(ultimoId))
     f_write.close()
     return
 
@@ -73,22 +68,22 @@ def generar_avatar(nombre):
     return
 
 def responder_con_imagen(tweets):
-    last_seen_id = retrieve_last_seen_id(FILE_NAME)
+    ultimoId = devuelve_ultimoId(archivoId)
     for tweet in tweets:
         if not tweet.retweeted and 'RT @' not in tweet.text:
             try:
                 media = "./img/example.png"
-                phrase = "Aquí está tu avatar generado por tu nombre: "
+                texto = "Aquí está tu avatar generado por tu nombre: "
                 generar_avatar(tweet.user.screen_name)
                 print('\nTweet de: @' + tweet.user.screen_name)
                 print('ID: @' + str(tweet.id))
                 tweetId = tweet.id
-                if tweetId > last_seen_id:
-                    store_last_seen_id(tweetId, FILE_NAME)
-                username = tweet.user.screen_name
-                api.update_with_media(media, status=phrase, in_reply_to_status_id=tweetId,
+                if tweetId > ultimoId:
+                    guarda_ultimoId(tweetId, archivoId)
+                usuario = tweet.user.screen_name
+                api.update_with_media(media, status=texto, in_reply_to_status_id=tweetId,
                                   auto_populate_reply_metadata=True)
-                print("Respuesta: " + phrase)
+                print("Respuesta: " + texto)
             except tweepy.TweepError as e:
                 print(e.reason)
             except StopIteration:
@@ -97,37 +92,37 @@ def responder_con_imagen(tweets):
 # Función responsablde de elegir y realizar una respuesta
 def responder(tweets, tipo):
     # La variable debe ser renovada para no repetir respuestas a tweets
-    last_seen_id = retrieve_last_seen_id(FILE_NAME)
+    ultimoId = devuelve_ultimoId(archivoId)
     for tweet in tweets:
         if not tweet.retweeted and 'RT @' not in tweet.text:
             try:
                 # Selecciona respuesta en función de la interacción
                 if tipo == "saludo":
-                    phrase = random.choice(f)
+                    texto = random.choice(f)
                 elif tipo == "web":
-                    phrase = "Nuestra web es https://osl.ugr.es/"
+                    texto = "Nuestra web es https://osl.ugr.es/"
                 elif tipo == "actividad":
-                    phrase = scraping_osl()
+                    texto = scraping_osl()
                 elif tipo == "contacto":
-                    phrase = "Contacta con nosotros por teléfono -> 958 24 10 00 o por e-mail -> osl@ugr.es . Síguenos en nuestro Twitter para mantenerte informado sobre todo @OSLUGR "
+                    texto = "Contacta con nosotros por teléfono -> 958 24 10 00 o por e-mail -> osl@ugr.es . Síguenos en nuestro Twitter para mantenerte informado sobre todo @OSLUGR "
                 elif tipo == "redes":
-                    phrase = "Twitter: @OSLUGR Facebook: https://www.facebook.com/SoftwareLibreUGR Instagram: https://www.instagram.com/oslugr YouTube: https://www.youtube.com/user/oslugr GitHub: https://github.com/oslugr Meetup: https://www.meetup.com/es-ES/Granada-Geek Telegram: https://telegram.me/oslugr"
+                    texto = "Twitter: @OSLUGR Facebook: https://www.facebook.com/SoftwareLibreUGR Instagram: https://www.instagram.com/oslugr YouTube: https://www.youtube.com/user/oslugr GitHub: https://github.com/oslugr Meetup: https://www.meetup.com/es-ES/Granada-Geek Telegram: https://telegram.me/oslugr"
                 elif tipo == "chiste":
-                    phrase = random.choice(chistes)
+                    texto = random.choice(chistes)
                 elif tipo == "creador":
-                    phrase = "Mi padre es @Juan_Barrilao @Juan__Barri y me debe unas piernas"
+                    texto = "Mi padre es @Juan_Barrilao @Juan__Barri y me debe unas piernas"
 
                 print('\nTweet de: @' + tweet.user.screen_name)
                 print('ID: @' + str(tweet.id))
                 tweetId = tweet.id
 
-                if tweetId > last_seen_id:
-                    store_last_seen_id(tweetId, FILE_NAME)
+                if tweetId > ultimoId:
+                    guarda_ultimoId(tweetId, archivoId)
 
-                username = tweet.user.screen_name
-                api.update_status(phrase, in_reply_to_status_id=tweetId,
+                usuario = tweet.user.screen_name
+                api.update_status(texto, in_reply_to_status_id=tweetId,
                                   auto_populate_reply_metadata=True)
-                print("Respuesta: " + phrase)
+                print("Respuesta: " + texto)
             except tweepy.TweepError as e:
                 print(e.reason)
             except StopIteration:
@@ -137,54 +132,54 @@ def responder(tweets, tipo):
 
 # Función que detecta el tipo de tweet para luego poder responder de una manera u otra
 def responder_tweets():
-    last_seen_id = retrieve_last_seen_id(FILE_NAME)
+    ultimoId = devuelve_ultimoId(archivoId)
 
     # Bloque saludo
     saludo = "saludo"
-    search_saludo = "@pruebarri_bot #hola"
+    buscar_saludo = "@pruebarri_bot #hola"
     tweets_saludo = tweepy.Cursor(
-        api.search, search_saludo, since_id=last_seen_id).items(numberOfTweets)
+        api.search, buscar_saludo, since_id=ultimoId).items(numeroTweets)
 
     # Bloque web
     web = "web"
-    search_web = "@pruebarri_bot #web"
+    buscar_web = "@pruebarri_bot #web"
     tweets_web = tweepy.Cursor(
-        api.search, search_web, since_id=last_seen_id).items(numberOfTweets)
+        api.search, buscar_web, since_id=ultimoId).items(numeroTweets)
 
     # Bloque actividad
     actividad = "actividad"
-    search_actividad = "@pruebarri_bot #actividad"
+    buscar_actividad = "@pruebarri_bot #actividad"
     tweets_actividad = tweepy.Cursor(
-        api.search, search_actividad, since_id=last_seen_id).items(numberOfTweets)
+        api.search, buscar_actividad, since_id=ultimoId).items(numeroTweets)
 
     # Bloque contacto
     contacto = "contacto"
-    search_contacto = "@pruebarri_bot #contacto"
+    buscar_contacto = "@pruebarri_bot #contacto"
     tweets_contacto = tweepy.Cursor(
-        api.search, search_contacto, since_id=last_seen_id).items(numberOfTweets)
+        api.search, buscar_contacto, since_id=ultimoId).items(numeroTweets)
 
     # Bloque redes
     redes = "redes"
-    search_redes = "@pruebarri_bot #redes"
+    buscar_redes = "@pruebarri_bot #redes"
     tweets_redes = tweepy.Cursor(
-        api.search, search_redes, since_id=last_seen_id).items(numberOfTweets)
+        api.search, buscar_redes, since_id=ultimoId).items(numeroTweets)
 
     # Bloque avatar
-    search_avatar = "@pruebarri_bot #avatar"
+    buscar_avatar = "@pruebarri_bot #avatar"
     tweets_avatar = tweepy.Cursor(
-        api.search, search_avatar, since_id=last_seen_id).items(numberOfTweets)
+        api.search, buscar_avatar, since_id=ultimoId).items(numeroTweets)
 
     # Bloque chiste
     chiste = "chiste"
-    search_chiste = "@pruebarri_bot #chiste"
+    buscar_chiste = "@pruebarri_bot #chiste"
     tweets_chiste = tweepy.Cursor(
-        api.search, search_chiste, since_id=last_seen_id).items(numberOfTweets)
+        api.search, buscar_chiste, since_id=ultimoId).items(numeroTweets)
 
     # Bloque creador
     creador = "creador"
-    search_creador = "@pruebarri_bot #creador"
+    buscar_creador = "@pruebarri_bot #creador"
     tweets_creador = tweepy.Cursor(
-        api.search, search_creador, since_id=last_seen_id).items(numberOfTweets)
+        api.search, buscar_creador, since_id=ultimoId).items(numeroTweets)
 
     # Bloque de respuestas
     responder(tweets_saludo, saludo)
